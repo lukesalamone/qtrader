@@ -2,7 +2,7 @@ import keras
 from keras.models import Sequential
 from keras.models import load_model
 from keras.layers import Dense
-from keras.optimizers import Adam
+from keras.optimizers import adam_v2
 
 import numpy as np
 import random
@@ -30,7 +30,7 @@ class Agent:
 		model.add(Dense(units=32, activation="relu"))
 		model.add(Dense(units=8, activation="relu"))
 		model.add(Dense(self.action_size, activation="linear"))
-		model.compile(loss="mse", optimizer=Adam(lr=0.001))
+		model.compile(loss="mse", optimizer=adam_v2.Adam(lr=0.001))
 
 		return model
 
@@ -44,7 +44,7 @@ class Agent:
 	def expReplay(self, batch_size):
 		mini_batch = []
 		l = len(self.memory)
-		for i in xrange(l - batch_size + 1, l):
+		for i in range(l - batch_size + 1, l):
 			mini_batch.append(self.memory[i])
 
 		for state, action, reward, next_state, done in mini_batch:
@@ -57,4 +57,4 @@ class Agent:
 			self.model.fit(state, target_f, epochs=1, verbose=0)
 
 		if self.epsilon > self.epsilon_min:
-			self.epsilon *= self.epsilon_decay 
+			self.epsilon *= self.epsilon_decay
